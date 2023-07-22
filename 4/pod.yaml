@@ -8,4 +8,3 @@ spec:
     image: blux2/kubernetes-handson-sample:0.1
     ports:
     - containerPort: 80
-
