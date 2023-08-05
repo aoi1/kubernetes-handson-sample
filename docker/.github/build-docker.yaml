@@ -1,0 +1,32 @@
+name: Build and Push Docker Image
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  IMAGE_NAME: kubernetes-handson-sample
+
+jobs:
+  build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get Git Tag
+        id: get_tag
+        run: echo ::set-output name=tag::$(git describe --tags --exact-match 2>/dev/null || echo "latest")
+
+      - name: Login to Docker Hub
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+      - name: Build Docker Image
+        run: docker build -t $DOCKER_USERNAME/$IMAGE_NAME:${{ steps.get_tag.outputs.tag }} .
+
+      - name: Push Docker Image
+        run: docker push $DOCKER_USERNAME/$IMAGE_NAME:${{ steps.get_tag.outputs.tag }}
+
