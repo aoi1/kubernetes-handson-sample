@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver
+  labels:
+    app: httpserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpserver
+  template:
+    metadata:
+      labels:
+        app: httpserver
+    spec:
+      containers:
+      - name: httpserver
+        image: blux2/kubernetes-handson-sample:1.0.0
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: httpserver-configmap
+              key: PORT
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: httpserver-configmap
+data:
+  PORT: "8081"
