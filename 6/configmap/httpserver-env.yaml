@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: httpserver
-        image: blux2/kubernetes-handson-sample:1.0.0-rc1
+        image: blux2/kubernetes-handson-sample:1.0.0
         env:
         - name: PORT
           valueFrom:
