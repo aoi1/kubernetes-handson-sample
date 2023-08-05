@@ -7,4 +7,4 @@ spec:
   - name: httpserver
     image: blux2/kubernetes-handson-sample:0.3
     ports:
-    - containerPort: 80
+    - containerPort: 8080
