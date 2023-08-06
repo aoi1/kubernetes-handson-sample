@@ -6,7 +6,7 @@ metadata:
   labels:
     app: httpserver
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: httpserver
@@ -17,17 +17,19 @@ spec:
     spec:
       containers:
       - name: httpserver
-        image: blux2/kubernetes-handson-sample:1.0.0
-        env:
-        - name: PORT
-          valueFrom:
-            configMapKeyRef:
-              name: httpserver-configmap
-              key: PORT
+        image: blux2/kubernetes-handson-sample:1.0.1
+        volumeMounts:
+        - name: httpserver-config
+          mountPath: /etc/config
+      volumes:
+      - name: httpserver-config
+        configMap:
+          name: httpserver-configmap
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: httpserver-configmap
 data:
-  PORT: "8081"
+  myconfig.txt: |-
+    I am hungry.
