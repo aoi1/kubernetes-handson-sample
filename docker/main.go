@@ -17,6 +17,11 @@ func main() {
 		fmt.Fprintf(w, "Hello, world! Let's learn Kubernetes!")
 	})
 
+  http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "OK")
+	})
+
 	log.Printf("Starting server on port %s\n", port)
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
