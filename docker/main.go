@@ -14,12 +14,21 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
 		fmt.Fprintf(w, "Hello, world! Let's learn Kubernetes!")
 	})
 
-  http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/health" {
+			http.NotFound(w, r)
+			return
+		}
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, "OK")
+		log.Printf("Health Status OK")
 	})
 
 	log.Printf("Starting server on port %s\n", port)
@@ -28,4 +37,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
