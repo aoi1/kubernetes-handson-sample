@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver
+  labels:
+    app: httpserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpserver
+  template:
+    metadata:
+      labels:
+        app: httpserver
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                values:
+                - httpserver
+                operator: In
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - name: httpserver
+        image: blux2/kubernetes-handson-sample:1.1.4
+        ports:
+        - containerPort: 8080
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: httpserver-pdb
+spec:
+  maxUnavailable: 10%
+  selector:
+    matchLabels:
+      app: httpserver
