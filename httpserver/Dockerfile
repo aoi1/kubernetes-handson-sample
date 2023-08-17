@@ -1,18 +1,10 @@
-# ビルドステージ
 FROM golang:1.20 AS builder
-
 WORKDIR /app
-
-COPY go.mod .
-RUN go mod download
-
 COPY . .
+ENV CGO_ENABLED=0
+RUN go mod download \
+&& go build -o main .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
-
-# ランタイムステージ
 FROM scratch
-
 COPY --from=builder /app/main /main
-
 CMD ["/main"]
