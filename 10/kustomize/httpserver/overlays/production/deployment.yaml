@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver
+spec:
+  replicas: 10
+  template:
+    spec:
+      containers:
+      - name: httpserver
+        resources:
+          requests:
+            memory: "1Gi"
+          limits:
+            memory: "1Gi"
