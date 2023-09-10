@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 )
+
+const defaultMessage = "Hello, world!"
 
 func main() {
 	port := os.Getenv("PORT")
@@ -14,30 +16,31 @@ func main() {
 		port = "8080"
 	}
 
+	message, err := readMessageFromConfig()
+	if err != nil {
+		log.Fatalf("Failed to read message from config: %v", err)
+		message = defaultMessage
+	}
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/" {
-			http.NotFound(w, r)
-			return
-		}
-		fmt.Fprintf(w, "Hello, world! Let's learn Kubernetes!")
+		fmt.Fprintf(w, message)
 	})
-
-	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/healthz" {
-			http.NotFound(w, r)
-			return
-		}
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "OK")
-		log.Printf("Health Status OK")
-	})
-
-	http.Handle("/metrics", promhttp.Handler())
 
 	log.Printf("Starting server on port %s\n", port)
-	err := http.ListenAndServe(":"+port, nil)
+	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
+func readMessageFromConfig() (string, error) {
+	configDir := "/etc/config"
+	configPath := fmt.Sprintf("%s/myconfig.txt", configDir)
+
+	data, err := ioutil.ReadFile(configPath)
+	if err != nil {
+		return defaultMessage, nil
+	}
+
+	return string(data), nil
 }
