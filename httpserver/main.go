@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
 	"os"
@@ -22,8 +21,8 @@ func main() {
 		fmt.Fprintf(w, "Hello, world! Let's learn Kubernetes!")
 	})
 
-	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/healthz" {
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/health" {
 			http.NotFound(w, r)
 			return
 		}
@@ -32,12 +31,9 @@ func main() {
 		log.Printf("Health Status OK")
 	})
 
-	http.Handle("/metrics", promhttp.Handler())
-
 	log.Printf("Starting server on port %s\n", port)
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
