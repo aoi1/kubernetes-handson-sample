@@ -31,5 +31,4 @@ kind: ConfigMap
 metadata:
   name: httpserver-configmap
 data:
-  myconfig.txt: |-
-    I am hungry.
+  myconfig.txt: I am hungry.
