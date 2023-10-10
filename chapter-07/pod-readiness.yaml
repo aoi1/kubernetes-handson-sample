@@ -7,10 +7,10 @@ metadata:
 spec:
   containers:
   - name: httpserver
-    image: blux2/kubernetes-handson-sample:1.1.2
+    image: blux2/delayfailserver:1.1
     readinessProbe:
       httpGet:
-        path: /health
+        path: /healthz
         port: 8080
       initialDelaySeconds: 5
       periodSeconds: 5

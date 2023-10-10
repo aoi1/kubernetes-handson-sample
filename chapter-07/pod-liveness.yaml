@@ -3,11 +3,11 @@ kind: Pod
 metadata:
   labels:
     app: httpserver
-  name: httpserver
+  name: httpserver-liveness
 spec:
   containers:
   - name: httpserver
-    image: blux2/kubernetes-handson-sample:1.1.2
+    image: blux2/delayfailserver:1.1
     livenessProbe:
       httpGet:
         path: /healthz
