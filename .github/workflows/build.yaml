@@ -35,3 +35,4 @@ jobs:
           tags: blux2/kubernetes-handson-sample:${{ github.ref_name }}
           context: ./httpserver
           file: ./httpserver/Dockerfile
+          no-cache: true
