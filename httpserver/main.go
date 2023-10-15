@@ -20,21 +20,7 @@ func main() {
 			http.NotFound(w, r)
 			return
 		}
-		const chunkSize = 50 * 1024 * 1024
-		var memoryChunk []byte
-
     fmt.Fprintf(w, "Hello, world! Let's learn Kubernetes!")
-		for {
-			newData := make([]byte, chunkSize)
-			for i := 0; i < chunkSize; i++ {
-				newData[i] = 0
-			}
-
-			memoryChunk = append(memoryChunk, newData...)
-
-			// 少しの遅延を追加してCPUの過剰使用を避ける
-			time.Sleep(10 * time.Millisecond)
-		}
 	})
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
@@ -54,5 +40,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+		const chunkSize = 50 * 1024 * 1024
+		var memoryChunk []byte
+		for {
+			newData := make([]byte, chunkSize)
+			for i := 0; i < chunkSize; i++ {
+				newData[i] = 0
+			}
 
+			memoryChunk = append(memoryChunk, newData...)
+
+			// 少しの遅延を追加してCPUの過剰使用を避ける
+			time.Sleep(10 * time.Millisecond)
+    }	
 }
