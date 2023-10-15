@@ -23,6 +23,7 @@ func main() {
 		const chunkSize = 50 * 1024 * 1024
 		var memoryChunk []byte
 
+    fmt.Fprintf(w, "Hello, world! Let's learn Kubernetes!")
 		for {
 			newData := make([]byte, chunkSize)
 			for i := 0; i < chunkSize; i++ {
